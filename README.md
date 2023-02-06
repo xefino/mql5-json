@@ -2,7 +2,7 @@
 This library contains an improved version of the [JAson library](https://www.mql5.com/en/code/13663) with better documentation and readability.
 
 ## Installation
-To install, simply clone this repository to your `MQL5/Include` directory.
+To install, simply clone this repository to your `MQL5/Include` directory, for MT5. For MT4, clone this repository to your `MQL4/Include` directory.
 
 ## Examples
 This library is extremely easy to use, if a bit verbose. This section contains details on how to serialize and deserialize data.

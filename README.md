@@ -32,9 +32,45 @@ string ConverToJson(const MqlTradeRequest &request) {
    js["fill_type"] = (int)request.type_filling;
    js["expiration_type"] = (int)request.type_time;
    js["volume"] = request.volume;
+      
+   delete js;
+   js = NULL;
    
    return js.Serialize();
 }
 ```
 
-Note that in this example, many of the types had to be casted because the `operator=` function is not capable of accepting enums or datetimes. This functionality will be included in a future release.
+### Deserialization
+Deserializing data is similarly simple. Create a `JSONNode` object, call the `Deserialize` function and then extract the data into the fields on the object you want to deserialize.
+
+```
+int ConverToJson(const string json, MqlTradeRequest &request) {
+
+   JSONNode *js = new JSONNode();
+   if (!js.Deserialize(json)) {
+      return -1;
+   }
+   
+   request.Action = (ENUM_TRADE_REQUEST_ACTIONS)js["action"].ToInteger();
+   request.Comment = js["comment"].ToString();
+   request.Expiration = (datetime)js["expiration"].ToInteger();
+   request.Magic = js["magic"].ToInteger();
+   request.Order = js["order"].ToInteger();
+   request.Price = js["price"].ToDouble();
+   request.StopLoss = js["stop_loss"].ToDouble();
+   request.StopLimit = js["stop_limit"].ToDouble();
+   request.Symbol = js["symbol"].ToString();
+   request.TakeProfit = js["take_profit"].ToDouble();
+   request.Type = (ENUM_ORDER_TYPE)js["type"].ToInteger();
+   request.TypeFilling = (ENUM_ORDER_TYPE_FILLING)js["fill_type"].ToInteger();
+   request.TypeTime = (ENUM_ORDER_TYPE_TIME)js["expiration_type"].ToInteger();
+   request.Volume = js["volume"].ToDouble();
+   
+   delete js;
+   js = NULL;
+   
+   return 0;
+}
+```
+
+Note that in these examples, many of the types had to be casted because the `operator=` function is not capable of accepting enums or datetimes. This functionality will be included in a future release.
